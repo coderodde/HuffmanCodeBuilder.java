@@ -1,6 +1,5 @@
 package io.github.coderodde.encoding;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,16 +22,17 @@ public final class HuffmanDecodingTree<S> {
         S symbol;
         TreeNode<S> zeroChild;
         TreeNode<S> oneChild;
-        
-        boolean isLeaf() {
-            return symbol != null;
-        }
     }
     
     /**
      * The root node of the tree.
      */
     private final TreeNode<S> root = new TreeNode<>();
+    
+    /**
+     * Caches the code length of the previously decoded symbol.
+     */
+    private int previousCodeLength = -1;
     
     /**
      * Constructs this Huffman decoding tree.
@@ -52,35 +52,38 @@ public final class HuffmanDecodingTree<S> {
     /**
      * Decodes a codeword to a symbol.
      * 
-     * @param codeword the codeword encoding a symbol.
-     * 
+     * @param rawData       the raw data for decompression.
+     * @param bitIndex the index of the starting bit of a codeword to scan.
      * @return the encoded symbol.
      */
-    public S decode(final CodeWord codeword) {
-        Objects.requireNonNull(codeword, "The input codeword is null");
+    public S decode(final byte[] rawData, int bitIndex) {
+        Objects.requireNonNull(rawData, "The input raw data is null");
+        Objects.requireNonNull(rawData, "The input start index is null");
+        
+        previousCodeLength = 0;
         
         TreeNode<S> node = root;
         
-        for (int i = 0; i < codeword.length(); ++i) {
-            final boolean bit = codeword.get(i);
-            
-            if (bit) {
-                // The current bit is set, move to the 1-child:
-                node = node.oneChild;
-            } else {
-                // The current bit is not set, move to the 0-child:
-                node = node.zeroChild;
-            }
-            
-            if (node == null) {
-                throw new IllegalStateException(
-                        String.format(
-                                "Encountered an invalid codeword (%s)", 
-                                codeword.toString()));
-            }
+        while (node.symbol == null) {
+            final boolean bit = readBit(rawData, bitIndex);
+            node = (bit ? node.oneChild : node.zeroChild);
+            ++bitIndex;
+            ++previousCodeLength;
         }
         
         return node.symbol;
+    }
+    
+    public int getPreviousCodeLength() {
+        return previousCodeLength;
+    }
+    
+    private static boolean readBit(final byte[] rawData, final int bitIndex) {
+        final int byteIndex = bitIndex / Byte.SIZE;
+        final byte targetByte = rawData[byteIndex];
+        final byte mask = (byte)(1 << (bitIndex % Byte.SIZE));
+        
+        return ((mask & targetByte) != 0);
     }
     
     /**

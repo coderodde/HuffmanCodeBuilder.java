@@ -18,23 +18,29 @@ public final class HuffmanByteCompressor {
      * Specifies how many bytes to use in order to communicate the size of the
      * Huffman code.
      */
-    private static final int BYTES_PER_CODE_SIZE = 4;
+    static final int BYTES_PER_CODE_SIZE = 4;
+    
+    /**
+     * Specifies how many bytes to use in order to communicate the actual length
+     * (in bytes) of the input byte array.
+     */
+    static final int BYTES_PER_BYTE_ARRAY_SIZE = 4;
     
     /**
      * Specifies how many bytes to reserve for describing the byte being 
      * encoded. 
      */
-    private static final int BYTES_PER_BYTE_DESCRIPTOR = 1;
+    static final int BYTES_PER_BYTE_DESCRIPTOR = 1;
     
     /**
      * Specifies how many bytes to reserve for signalling the codeword length.
      */
-    private static final int BYTES_PER_CODEWORD_LENGTH = 1;
+    static final int BYTES_PER_CODEWORD_LENGTH = 1;
     
     /**
      * Specifies how many bytes to use for the codeword.
      */
-    private static final int BYTES_PER_CODEWORD_MAX = 4;
+    static final int BYTES_PER_CODEWORD_MAX = 4;
     
     /**
      * Compresses the {@code rawData} {@code byte}-array using the input
@@ -74,7 +80,10 @@ public final class HuffmanByteCompressor {
         final byte[] outputData = new byte[(int)(countNumberOfBytesInCodeHeader + 
                                                  countNumberOfBytesInRawData)];
         
-        fillHeader(code, outputData);
+        fillHeader(code, 
+                   outputData,
+                   rawData.length);
+        
         fillRawData(code, 
                     outputData,
                     rawData,
@@ -84,12 +93,18 @@ public final class HuffmanByteCompressor {
     }
         
     private static void fillHeader(final HuffmanCodeTable<Byte> code,
-                                   final byte[] outputData) {
+                                   final byte[] outputData,
+                                   final int rawDataLength) {
         
         // Fill the code size at the very first 32-bit integer:
         final byte[] codeSizeBytes = 
                 ByteBuffer.allocate(BYTES_PER_CODE_SIZE)
                           .putInt(code.size())
+                          .array();
+        
+        final byte[] rawDataBytes = 
+                ByteBuffer.allocate(BYTES_PER_BYTE_ARRAY_SIZE)
+                          .putInt(rawDataLength)
                           .array();
         
         System.arraycopy(codeSizeBytes, 
@@ -98,11 +113,18 @@ public final class HuffmanByteCompressor {
                          0, 
                          codeSizeBytes.length);
         
+        System.arraycopy(rawDataBytes, 
+                         0,
+                         outputData,
+                         codeSizeBytes.length, 
+                         rawDataBytes.length);
+        
         int currentByteIndex = BYTES_PER_CODE_SIZE;
         
         for (final Map.Entry<Byte, CodeWord> entry : code) {
             outputData[currentByteIndex++] = entry.getKey();
             outputData[currentByteIndex++] = (byte) entry.getValue().length();
+            
             final byte[] codewordBytes = 
                     convertCodeWordToBytes(entry.getValue());
             
