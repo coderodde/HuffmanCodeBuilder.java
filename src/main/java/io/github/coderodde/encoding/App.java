@@ -15,14 +15,20 @@ import java.util.Map;
  * @since 1.0.0 (Nov 14, 2025))
  */
 public final class App {
+    
+    /**
+     * This extension is added to the compressed files.
+     */
+    private static final String COMPRESSED_FILE_EXTENSION = ".huf";
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
+        if (args.length < 1) {
             return;
         }
         
         final String inputFileName  = args[0];
-        final String outputFileName = args[1];
+        final String outputFileName = inputFileName + COMPRESSED_FILE_EXTENSION;
+        
         final File inputFile = new File(inputFileName);
         
         if (!inputFile.exists()) {
@@ -32,11 +38,11 @@ public final class App {
         
         final File outputFile = new File(outputFileName);
         
-        if (!outputFile.exists()) {
-            System.err.printf("Output file '%s' does not exist.", 
-                              inputFileName);
-            System.exit(1);
-        }
+//        if (outputFile.exists()) {
+//            System.err.printf("Output file '%s' already exists.", 
+//                              outputFileName);
+//            System.exit(1);
+//        }
         
         final Path inputPath  = inputFile .toPath();
         final Path outputPath = outputFile.toPath();

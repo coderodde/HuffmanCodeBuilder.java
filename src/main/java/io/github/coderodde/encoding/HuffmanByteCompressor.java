@@ -13,15 +13,47 @@ import java.util.Objects;
  */
 public final class HuffmanByteCompressor {
 
+    /**
+     * Specifies how many bytes to use in order to communicate the size of the
+     * Huffman code.
+     */
+    private static final int BYTES_PER_CODE_SIZE = 4;
+    
+    /**
+     * Specifies how many bytes to reserve for describing the byte being 
+     * encoded. 
+     */
     private static final int BYTES_PER_BYTE_DESCRIPTOR = 1;
+    
+    /**
+     * Specifies how many bytes to reserve for signalling the codeword length.
+     */
     private static final int BYTES_PER_CODEWORD_LENGTH = 1;
+    
+    /**
+     * Specifies how many bytes to use for the codeword.
+     */
     private static final int BYTES_PER_CODEWORD_MAX = 4;
     
+    /**
+     * Compresses the {@code rawData} {@code byte}-array using the input
+     * {@code weightDistribution}.
+     * 
+     * @param weightDistribution the weight distribution to use in compressing.
+     * @param rawData            the raw data to compress.
+     * 
+     * @return the full binary {@code byte}-array containing all the data needed
+     *         to decompress the compressed file.
+     */
     public static byte[] 
         compress(final WeightDistribution<Byte> weightDistribution, 
                  final byte[] rawData) {
+            
         Objects.requireNonNull(weightDistribution);
         Objects.requireNonNull(rawData);
+        
+        System.out.println("dist");
+        System.out.println(weightDistribution);
         
         if (rawData.length == 0) {
             throw new IllegalArgumentException("The input byte array is empty");
@@ -30,10 +62,13 @@ public final class HuffmanByteCompressor {
         final HuffmanCodeTable<Byte> code = 
                 HuffmanCodeBuilder.buildCode(weightDistribution);
         
+        System.out.println("code");
+        System.out.println(code);
+        
         final long countNumberOfBitsInRawData = countBitsInRawData(code, 
                                                                    rawData);
         
-        final int countNumberOfBitsInCodeHeader = countBitsInCodeHeader(code);
+        final int countNumberOfBitsInCodeHeader = countBytesInCodeHeader(code);
         
         final byte[] outputData = new byte[(int)(countNumberOfBitsInCodeHeader + 
                                                  countNumberOfBitsInRawData)];
@@ -124,13 +159,15 @@ public final class HuffmanByteCompressor {
             bits += code.getCodeword(b).length();
         }
         
-        return bits;
+        return bits / Byte.SIZE + (bits % Byte.SIZE != 0 ? 1 : 0);
     }
     
     private static int
-        countBitsInCodeHeader(final HuffmanCodeTable<Byte> code) {
+        countBytesInCodeHeader(final HuffmanCodeTable<Byte> code) {
         return code.size() * (BYTES_PER_BYTE_DESCRIPTOR + 
                               BYTES_PER_CODEWORD_LENGTH +
-                              BYTES_PER_CODEWORD_MAX);
+                              BYTES_PER_CODEWORD_MAX)
+                
+                            + BYTES_PER_CODEWORD_LENGTH;
     }
 }
