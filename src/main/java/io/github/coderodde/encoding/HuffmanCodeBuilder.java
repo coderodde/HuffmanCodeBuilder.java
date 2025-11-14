@@ -11,7 +11,7 @@ import java.util.Set;
  * This class implements the Huffman code builder over weight distributions.
  * 
  * @author Rodion "rodde" Efremov
- * @version 2.0.0 (Nov 13, 2025)
+ * @version 2.0.1 (Nov 14, 2025)
  * @since 1.0.0 (Nov 12, 2025)
  */
 public final class HuffmanCodeBuilder {
@@ -38,9 +38,9 @@ public final class HuffmanCodeBuilder {
             final double weight = entry.getValue();
             final S symbol      = entry.getKey();
             
-            final Set<WeightedSymbol<S>> set = new HashSet<>();
+            final Set<S> set = new HashSet<>();
             
-            set.add(new WeightedSymbol<>(symbol, weight));
+            set.add(symbol);
             queue.add(new WeightedSymbolSet<>(set, weight));
         }
         
@@ -53,42 +53,22 @@ public final class HuffmanCodeBuilder {
             final WeightedSymbolSet<S> entry1 = queue.remove();
             final WeightedSymbolSet<S> entry2 = queue.remove();
             
-            for (final WeightedSymbol<S> symbolEntry : entry1.set) {
-                final S symbol = symbolEntry.symbol;
+            for (final S symbol : entry1.getSet()) {
                 codeTable.getCodeword(symbol).prependBit(true);
             }
             
-            for (final WeightedSymbol<S> symbolEntry : entry2.set) {
-                final S symbol = symbolEntry.symbol;
+            for (final S symbol : entry2.getSet()) {
                 codeTable.getCodeword(symbol).prependBit(false);
             }
             
-            entry1.set.addAll(entry2.set);
+            entry1.getSet().addAll(entry2.getSet());
             
             queue.add(new WeightedSymbolSet<>(
-                            entry1.set, 
-                            entry1.totalSetWeight + 
-                            entry2.totalSetWeight));
+                            entry1.getSet(),
+                            entry1.getTotalWeight() + 
+                            entry2.getTotalWeight()));
         }
         
         return codeTable;
-    }
-        
-    private static final class WeightedSymbolSet<T> 
-            implements Comparable<WeightedSymbolSet<T>> {
-        
-        Set<WeightedSymbol<T>> set;
-        double totalSetWeight;
-        
-        WeightedSymbolSet(final Set<WeightedSymbol<T>> set,
-                           final double totalSetWeight) {
-            this.set = set;
-            this.totalSetWeight = totalSetWeight;
-        }
-
-        @Override
-        public int compareTo(final WeightedSymbolSet<T> o) {
-            return Double.compare(totalSetWeight, o.totalSetWeight);
-        }
     }
 }

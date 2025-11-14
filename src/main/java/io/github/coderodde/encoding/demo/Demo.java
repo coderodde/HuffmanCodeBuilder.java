@@ -13,10 +13,10 @@ import io.github.coderodde.encoding.WeightDistribution;
  */
 public final class Demo {
 
-    public static void main(String[] args) {
-        demo1();
-        dctWeek2Task1();
-    }
+//    public static void main(String[] args) {
+//        demo1();
+//        dctWeek2Task1();
+//    }
     
     private static void demo1() {
         System.out.println("--- demo1 ---");

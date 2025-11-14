@@ -1,0 +1,136 @@
+package io.github.coderodde.encoding;
+
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * This class implements a method for compressing byte-wise files via Huffman-
+ * coding.
+ * 
+ * @author Rodion "rodde" Efremov
+ * @version 1.0.0 (Nov 14, 2025)
+ * @since 1.0.0 (Nov 14, 2025)
+ */
+public final class HuffmanByteCompressor {
+
+    private static final int BYTES_PER_BYTE_DESCRIPTOR = 1;
+    private static final int BYTES_PER_CODEWORD_LENGTH = 1;
+    private static final int BYTES_PER_CODEWORD_MAX = 4;
+    
+    public static byte[] 
+        compress(final WeightDistribution<Byte> weightDistribution, 
+                 final byte[] rawData) {
+        Objects.requireNonNull(weightDistribution);
+        Objects.requireNonNull(rawData);
+        
+        if (rawData.length == 0) {
+            throw new IllegalArgumentException("The input byte array is empty");
+        }
+        
+        final HuffmanCodeTable<Byte> code = 
+                HuffmanCodeBuilder.buildCode(weightDistribution);
+        
+        final long countNumberOfBitsInRawData = countBitsInRawData(code, 
+                                                                   rawData);
+        
+        final int countNumberOfBitsInCodeHeader = countBitsInCodeHeader(code);
+        
+        final byte[] outputData = new byte[(int)(countNumberOfBitsInCodeHeader + 
+                                                 countNumberOfBitsInRawData)];
+        
+        fillHeader(code, outputData);
+        fillRawData(code, 
+                    outputData,
+                    rawData,
+                    countNumberOfBitsInCodeHeader);
+        
+        return outputData;
+    }
+        
+    private static void fillHeader(final HuffmanCodeTable<Byte> code,
+                                   final byte[] outputData) {
+        
+        int currentByteIndex = 0;
+        
+        for (final Map.Entry<Byte, CodeWord> entry : code) {
+            outputData[currentByteIndex++] = entry.getKey();
+            outputData[currentByteIndex++] = (byte) entry.getValue().length();
+            final byte[] codewordBytes = 
+                    convertCodeWordToBytes(entry.getValue());
+            
+            System.arraycopy(outputData, 
+                             currentByteIndex, 
+                             codewordBytes, 
+                             0, 
+                             BYTES_PER_CODEWORD_MAX);
+            
+            currentByteIndex += BYTES_PER_CODEWORD_MAX;
+        }
+    }
+    
+    private static void fillRawData(final HuffmanCodeTable<Byte> code,
+                                    final byte[] outputData,
+                                    final byte[] rawData,
+                                    final int headerSkipBytes) {
+        int bitIndex = 0;
+        int byteIndex = headerSkipBytes;
+        
+        for (final byte currentByte : rawData) {
+            final CodeWord codeword = code.getCodeword(currentByte);
+            final int codewordLength = codeword.length();
+            
+            for (int i = 0; i < codewordLength; ++i) {
+                
+                if (codeword.get(i)) {
+                    setBit(outputData,
+                           byteIndex,
+                           bitIndex);
+                }
+                
+                ++bitIndex;
+                
+                if (bitIndex == Byte.SIZE) {
+                    bitIndex = 0;
+                    ++byteIndex;
+                }
+            }
+        }
+    }
+    
+    private static void setBit(final byte[] outputData,
+                               final int byteIndex,
+                               final int bitIndex) {
+        outputData[byteIndex] |= (byte)(1 << bitIndex);
+    }
+    
+    private static byte[] convertCodeWordToBytes(final CodeWord codeword) {
+        final byte[] codewordBytes = new byte[BYTES_PER_CODEWORD_MAX];
+        final byte[] codewordBits  = codeword.toByteArray();
+        
+        System.arraycopy(codewordBits,
+                         0,
+                         codewordBytes, 
+                         0, 
+                         codewordBits.length);
+        
+        return codewordBytes;
+    }
+        
+    private static long countBitsInRawData(final HuffmanCodeTable<Byte> code,
+                                           final byte[] rawData) {
+        long bits = 0L;
+        
+        for (final byte b : rawData) {
+            bits += code.getCodeword(b).length();
+        }
+        
+        return bits;
+    }
+    
+    private static int
+        countBitsInCodeHeader(final HuffmanCodeTable<Byte> code) {
+        return code.size() * (BYTES_PER_BYTE_DESCRIPTOR + 
+                              BYTES_PER_CODEWORD_LENGTH +
+                              BYTES_PER_CODEWORD_MAX);
+    }
+}

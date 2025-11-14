@@ -21,6 +21,10 @@ public class CodeWord {
         this.bits = new BitSet(length);
     }
     
+    public byte[] toByteArray() {
+        return bits.toByteArray();
+    }
+    
     public void prependBit(final boolean bit) {
         if (bit) {
             bits.set(length);
