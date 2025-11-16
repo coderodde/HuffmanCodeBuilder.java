@@ -1,4 +1,4 @@
-package io.github.coderodde.encoding;
+package io.github.coderodde.compressor.app;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -72,10 +72,12 @@ public final class HuffmanByteCompressor {
         System.out.println("code");
         System.out.println(code);
         
-        final long countNumberOfBytesInRawData = countBitsInRawData(code, 
-                                                                    rawData);
+        final int countNumberOfBytesInRawData = 
+                Utils.countBitsInRawData(code, 
+                                         rawData);
         
-        final int countNumberOfBytesInCodeHeader = countBytesInCodeHeader(code);
+        final int countNumberOfBytesInCodeHeader = 
+                Utils.countBytesInCodeHeader(code.size());
         
         final byte[] outputData = new byte[(int)(countNumberOfBytesInCodeHeader + 
                                                  countNumberOfBytesInRawData)];
@@ -173,36 +175,16 @@ public final class HuffmanByteCompressor {
         outputData[byteIndex] |= (byte)(1 << bitIndex);
     }
     
-    private static byte[] convertCodeWordToBytes(final CodeWord codeword) {
-        final byte[] codewordBytes = new byte[BYTES_PER_CODEWORD_MAX];
-        final byte[] codewordBits  = codeword.toByteArray();
-        
-        System.arraycopy(codewordBits,
-                         0,
-                         codewordBytes, 
-                         0, 
-                         codewordBits.length);
-        
-        return codewordBytes;
-    }
-        
-    private static long countBitsInRawData(final HuffmanCodeTable<Byte> code,
-                                           final byte[] rawData) {
-        long bits = 0L;
-        
-        for (final byte b : rawData) {
-            bits += code.getCodeword(b).length();
-        }
-        
-        return bits / Byte.SIZE + (bits % Byte.SIZE != 0 ? 1 : 0);
-    }
-    
-    private static int
-        countBytesInCodeHeader(final HuffmanCodeTable<Byte> code) {
-        final int codeEntryLength = BYTES_PER_BYTE_DESCRIPTOR + 
-                                    BYTES_PER_CODEWORD_LENGTH +
-                                    BYTES_PER_CODEWORD_MAX;
-        
-        return (code.size() * codeEntryLength) + BYTES_PER_CODE_SIZE;
-    }
+//    private static byte[] convertCodeWordToBytes(final CodeWord codeword) {
+//        final byte[] codewordBytes = new byte[BYTES_PER_CODEWORD_MAX];
+//        final byte[] codewordBits  = codeword.toByteArray();
+//        
+//        System.arraycopy(codewordBits,
+//                         0,
+//                         codewordBytes, 
+//                         0, 
+//                         codewordBits.length);
+//        
+//        return codewordBytes;
+//    }
 }

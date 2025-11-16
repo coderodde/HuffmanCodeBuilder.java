@@ -1,4 +1,4 @@
-package io.github.coderodde.encoding;
+package io.github.coderodde.compressor.app;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +16,19 @@ import java.util.Map;
  */
 public final class App {
     
+    private static final int EXIT_FAILURE = 1;
+    
     /**
      * This extension is added to the compressed files.
      */
     private static final String COMPRESSED_FILE_EXTENSION = ".huf";
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 1) {
-            return;
+        
+        if (args.length == 1) {
+            compressFile(args[0]);
+        } else if (args.length == 2) {
+            decompressFile(args[0], args[1]);
         }
         
         final String inputFileName  = args[0];
@@ -80,5 +85,45 @@ public final class App {
         }
         
         return distribution;
+    }
+        
+    private static void compressFile(final String inputFileName) throws IOException {
+        final File inputFile = new File(inputFileName);
+        
+        if (!inputFile.exists()) {
+            System.err.printf(
+                    "[ERROR]: The input file '%s' does not exist.\n", 
+                    inputFileName);
+            
+            System.exit(EXIT_FAILURE);
+        }
+        
+        if (inputFileName.endsWith(COMPRESSED_FILE_EXTENSION)) {
+            System.err.printf(
+                "[ERROR}: Input file '%s' already seems to  be compressed.\n", 
+                inputFileName);
+            
+            System.exit(EXIT_FAILURE);
+        }
+        
+        final Path path = inputFile.toPath();
+        final byte[] rawData = Files.readAllBytes(path);
+        final WeightDistribution<Byte> weightDistribution = 
+                getByteWeightDistribution(rawData);
+        
+        final byte[] compressedData = 
+                HuffmanByteCompressor.compress(weightDistribution,
+                                               rawData);
+        
+        final File outputFile = 
+                new File(inputFileName + COMPRESSED_FILE_EXTENSION);
+        
+        Files.write(outputFile.toPath(), 
+                    compressedData);
+    }
+    
+    private static void decompressFile(final String compressedFileName,
+                                       final String outputFileName) {
+        
     }
 }

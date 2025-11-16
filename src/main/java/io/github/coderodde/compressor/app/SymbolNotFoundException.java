@@ -1,8 +1,8 @@
-package io.github.coderodde.encoding;
+package io.github.coderodde.compressor.app;
 
 /**
  * This exception class implements an exception that is thrown if 
- * {@link io.github.coderodde.encoding.WeightDistribution} does not contain a
+ * {@link io.github.coderodde.compressor.app.WeightDistribution} does not contain a
  * requested symbol.
  * 
  * @author Rodion "rodde" Efremov

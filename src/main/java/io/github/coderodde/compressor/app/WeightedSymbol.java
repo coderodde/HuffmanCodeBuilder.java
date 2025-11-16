@@ -1,3 +1,5 @@
+package io.github.coderodde.compressor.app;
+
 //package io.github.coderodde.encoding;
 //
 //import java.util.Objects;

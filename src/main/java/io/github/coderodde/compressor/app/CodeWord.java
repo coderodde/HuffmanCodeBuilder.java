@@ -1,4 +1,4 @@
-package io.github.coderodde.encoding;
+package io.github.coderodde.compressor.app;
 
 import java.util.BitSet;
 

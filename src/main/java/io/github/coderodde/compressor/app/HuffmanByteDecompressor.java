@@ -1,10 +1,10 @@
-package io.github.coderodde.encoding;
+package io.github.coderodde.compressor.app;
 
-import static io.github.coderodde.encoding.HuffmanByteCompressor.BYTES_PER_BYTE_ARRAY_SIZE;
-import static io.github.coderodde.encoding.HuffmanByteCompressor.BYTES_PER_BYTE_DESCRIPTOR;
-import static io.github.coderodde.encoding.HuffmanByteCompressor.BYTES_PER_CODEWORD_LENGTH;
-import static io.github.coderodde.encoding.HuffmanByteCompressor.BYTES_PER_CODEWORD_MAX;
-import static io.github.coderodde.encoding.HuffmanByteCompressor.BYTES_PER_CODE_SIZE;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_BYTE_ARRAY_SIZE;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_BYTE_DESCRIPTOR;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_LENGTH;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_MAX;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODE_SIZE;
 import java.nio.ByteBuffer;
 
 /**
