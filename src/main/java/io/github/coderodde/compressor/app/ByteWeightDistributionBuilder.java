@@ -36,12 +36,8 @@ public final class ByteWeightDistributionBuilder {
         final Map<Byte, Integer> frequencyMap = 
                 new HashMap<>(BYTE_ALPHABET_SIZE);
         
-        for (int i = Byte.MIN_VALUE; i <= Byte.MAX_VALUE; ++i) {
-            frequencyMap.put((byte) i, 0);
-        }
-        
         for (final byte b : rawData) {
-            frequencyMap.put(b, frequencyMap.get(b) + 1);
+            frequencyMap.put(b, frequencyMap.getOrDefault(b, 0) + 1);
         }
         
         for (final Map.Entry<Byte, Integer> entry : frequencyMap.entrySet()) {

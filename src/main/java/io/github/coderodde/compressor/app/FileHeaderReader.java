@@ -5,6 +5,7 @@ import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
+import java.nio.ByteOrder;
 
 /**
  * This class implements the reader returning the file header data such as the 
@@ -60,7 +61,7 @@ public final class FileHeaderReader {
                          codeTableSizeBytes.length);
         
         final ByteBuffer byteBuffer = ByteBuffer.wrap(codeTableSizeBytes);
-        return byteBuffer.getInt();
+        return byteBuffer.order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
     
     private int readRawDataLength() {
@@ -73,7 +74,7 @@ public final class FileHeaderReader {
                          rawDataLengthBytes.length);
         
         final ByteBuffer byteBuffer = ByteBuffer.wrap(rawDataLengthBytes);
-        return byteBuffer.getInt();
+        return byteBuffer.order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
     
     private HuffmanCodeTable<Byte> readCodeTable(final int codeTableSize) {

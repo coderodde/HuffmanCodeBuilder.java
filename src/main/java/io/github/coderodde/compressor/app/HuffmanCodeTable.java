@@ -53,13 +53,37 @@ public final class HuffmanCodeTable<S>
         return symbolToCodeWordMap.get(symbol);
     }
     
-    void linkSymbolToCodeword(final S symbol, final CodeWord codeword) {
+    public void linkSymbolToCodeword(final S symbol, final CodeWord codeword) {
         Objects.requireNonNull(symbol, "The input symbol is null");
         Objects.requireNonNull(codeword, "The input codeword is null");
         
         symbolToCodeWordMap.put(symbol, codeword);
     }
 
+    @Override
+    public int hashCode() {
+        return symbolToCodeWordMap.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object object) {
+        if (object == this) {
+            return true;
+        }
+        
+        if (object == null) {
+            return false;
+        }
+    
+        if (!getClass().equals(object.getClass())) {
+            return false;
+        }
+        
+        final HuffmanCodeTable<S> other = (HuffmanCodeTable<S>) object;
+        
+        return symbolToCodeWordMap.equals(other.symbolToCodeWordMap);
+    }
+    
     @Override
     public Iterator<Map.Entry<S, CodeWord>> iterator() {
         return new SymbolCodeWordIterator();

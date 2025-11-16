@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Objects;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
+import java.nio.ByteOrder;
 
 /**
  * This class writes the file header to the compressed file.
@@ -63,6 +64,7 @@ public final class FileHeaderWriter {
     private void writeCodeSize() {
         final byte[] codeSizeBytes = 
                 ByteBuffer.allocate(BYTES_PER_CODE_SIZE)
+                          .order(ByteOrder.LITTLE_ENDIAN)
                           .putInt(codeTable.size())
                           .array();
         
@@ -80,6 +82,7 @@ public final class FileHeaderWriter {
     private void writeRawDataLength() {
         final byte[] rawDataLengthBytes = 
                 ByteBuffer.allocate(BYTES_PER_RAW_DATA_LENGTH)
+                          .order(ByteOrder.LITTLE_ENDIAN)
                           .putInt(rawDataLength)
                           .array();
         
