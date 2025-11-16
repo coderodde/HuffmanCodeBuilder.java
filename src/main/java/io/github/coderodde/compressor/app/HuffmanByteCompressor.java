@@ -24,7 +24,7 @@ public final class HuffmanByteCompressor {
      * Specifies how many bytes to use in order to communicate the actual length
      * (in bytes) of the input byte array.
      */
-    static final int BYTES_PER_BYTE_ARRAY_SIZE = 4;
+    static final int BYTES_PER_RAW_DATA_LENGTH = 4;
     
     /**
      * Specifies how many bytes to reserve for describing the byte being 
@@ -105,7 +105,7 @@ public final class HuffmanByteCompressor {
                           .array();
         
         final byte[] rawDataBytes = 
-                ByteBuffer.allocate(BYTES_PER_BYTE_ARRAY_SIZE)
+                ByteBuffer.allocate(BYTES_PER_RAW_DATA_LENGTH)
                           .putInt(rawDataLength)
                           .array();
         
@@ -127,8 +127,9 @@ public final class HuffmanByteCompressor {
             outputData[currentByteIndex++] = entry.getKey();
             outputData[currentByteIndex++] = (byte) entry.getValue().length();
             
-            final byte[] codewordBytes = 
-                    convertCodeWordToBytes(entry.getValue());
+            // TODO: Fix this shit.
+            final byte[] codewordBytes = null;
+//                    convertCodeWordToBytes(entry.getValue());
             
             System.arraycopy(outputData, 
                              currentByteIndex, 

@@ -1,11 +1,11 @@
 package io.github.coderodde.compressor.app;
 
-import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_BYTE_ARRAY_SIZE;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_MAX;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODE_SIZE;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Objects;
+import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
 
 /**
  * This class writes the file header to the compressed file.
@@ -79,7 +79,7 @@ public final class FileHeaderWriter {
      */
     private void writeRawDataLength() {
         final byte[] rawDataLengthBytes = 
-                ByteBuffer.allocate(BYTES_PER_BYTE_ARRAY_SIZE)
+                ByteBuffer.allocate(BYTES_PER_RAW_DATA_LENGTH)
                           .putInt(rawDataLength)
                           .array();
         
@@ -95,7 +95,7 @@ public final class FileHeaderWriter {
      * from the 8th byte.
      */
     private void writeCodeTable() {
-        int currentByteIndex = BYTES_PER_CODE_SIZE + BYTES_PER_BYTE_ARRAY_SIZE;
+        int currentByteIndex = BYTES_PER_CODE_SIZE + BYTES_PER_RAW_DATA_LENGTH;
         
         for (final Map.Entry<Byte, CodeWord> entry : codeTable) {
             outputData[currentByteIndex++] = entry.getKey();
