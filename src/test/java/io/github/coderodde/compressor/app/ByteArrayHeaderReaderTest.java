@@ -8,10 +8,7 @@ import org.junit.Before;
 
 public final class ByteArrayHeaderReaderTest {   
     
-    private static final int SEED = 13;
-    private static final int MAXIMUM_BYTE_ARRAY_LENGTH = 2_000;
     private static final int STRESS_TEST_ITERATIONS = 50;
-    private static final Random RANDOM = new Random(SEED);
     
     private static final byte[] COMPRESSED_DATA = new byte[10_000];
     
@@ -51,7 +48,7 @@ public final class ByteArrayHeaderReaderTest {
             // Clear the output buffer in order to get rid of junk:
             Arrays.fill(COMPRESSED_DATA, (byte) 0);
             
-            final byte[] rawData = getRawData();
+            final byte[] rawData = Utils.getRawData();
             
             final WeightDistribution<Byte> weightDistribution =
                     ByteWeightDistributionBuilder
@@ -76,12 +73,5 @@ public final class ByteArrayHeaderReaderTest {
             assertEquals(rawData.length, rawDataLength);
             assertEquals(expectedCodeTable, readCodeTable);
         }
-    }
-    
-    private static final byte[] getRawData() {
-        final int length = 1 + RANDOM.nextInt(MAXIMUM_BYTE_ARRAY_LENGTH);
-        final byte[] rawData = new byte[length];
-        RANDOM.nextBytes(rawData);
-        return rawData;
     }
 }
