@@ -1,10 +1,6 @@
 package io.github.coderodde.compressor.app;
 
 import java.util.Arrays;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,7 +11,7 @@ public class ByteArrayCompressedDataReaderTest {
     private static final byte[] COMPRESSED_DATA = new byte[10_000];
     
     @Test
-    public void read() {
+    public void readStressTest() {
         for (int i = 0; i < STRESS_TEST_ITERATIONS; ++i) {
             System.out.println("Iteration: i = " + i);
             
