@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 
-public final class FileHeaderReaderTest {   
+public final class ByteArrayHeaderReaderTest {   
     
     private static final int SEED = 13;
     private static final int MAXIMUM_BYTE_ARRAY_LENGTH = 2_000;
@@ -30,13 +30,13 @@ public final class FileHeaderReaderTest {
         final HuffmanCodeTable<Byte> expectedCodeTable = 
                 HuffmanCodeBuilder.buildCode(wd);
         
-        final FileHeaderWriter writer = new FileHeaderWriter(rawData.length,
+        final ByteArrayHeaderWriter writer = new ByteArrayHeaderWriter(rawData.length,
                                                              COMPRESSED_DATA,
                                                              expectedCodeTable);
         
         writer.write();
         
-        final FileHeaderReader reader = new FileHeaderReader(COMPRESSED_DATA);
+        final ByteArrayHeaderReader reader = new ByteArrayHeaderReader(COMPRESSED_DATA);
         
         final int resultRawDataLength = reader.getRawDataLength();
         final HuffmanCodeTable<Byte> resultCodeTable = reader.getCodeTable();
@@ -60,15 +60,15 @@ public final class FileHeaderReaderTest {
             final HuffmanCodeTable<Byte> expectedCodeTable = 
                     HuffmanCodeBuilder.buildCode(weightDistribution);
             
-            final FileHeaderWriter writer = 
-                    new FileHeaderWriter(rawData.length,
+            final ByteArrayHeaderWriter writer = 
+                    new ByteArrayHeaderWriter(rawData.length,
                                          COMPRESSED_DATA, 
                                          expectedCodeTable);
             
             writer.write();
             
-            final FileHeaderReader reader = 
-                    new FileHeaderReader(COMPRESSED_DATA);
+            final ByteArrayHeaderReader reader = 
+                    new ByteArrayHeaderReader(COMPRESSED_DATA);
             
             final int rawDataLength = reader.getRawDataLength();
             final HuffmanCodeTable<Byte> readCodeTable = reader.getCodeTable();

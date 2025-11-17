@@ -15,7 +15,7 @@ import java.nio.ByteOrder;
  * @version 1.0.0 (Nov 16, 2025)
  * @since 1.0.0 (Nov 16, 2025)
  */
-public final class FileHeaderWriter {
+public final class ByteArrayHeaderWriter {
 
     /**
      * The minimum length of the raw data byte array.
@@ -37,7 +37,7 @@ public final class FileHeaderWriter {
      */
     private final HuffmanCodeTable<Byte> codeTable;
     
-    public FileHeaderWriter(final int rawDataLength,
+    public ByteArrayHeaderWriter(final int rawDataLength,
                             final byte[] outputData,
                             final HuffmanCodeTable<Byte> codeTable) {
         

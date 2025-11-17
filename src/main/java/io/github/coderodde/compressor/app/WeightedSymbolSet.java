@@ -13,7 +13,7 @@ import java.util.Set;
 final class WeightedSymbolSet<S> implements Comparable<WeightedSymbolSet<S>> {
 
     private final Set<S> set;
-    private double totalSetWeight;
+    private final double totalSetWeight;
 
     WeightedSymbolSet(final Set<S> set,
                       final double totalSetWeight) {

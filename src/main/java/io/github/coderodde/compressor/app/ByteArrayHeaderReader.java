@@ -16,7 +16,7 @@ import java.util.Arrays;
  * @version 1.0.0 (Nov 16, 2025)
  * @since 1.0.0 (Nov 16, 2025)
  */
-public final class FileHeaderReader {
+public final class ByteArrayHeaderReader {
 
     /**
      * The compressed data byte array containing the header.
@@ -34,7 +34,7 @@ public final class FileHeaderReader {
      */
     private final HuffmanCodeTable<Byte> codeTable;
     
-    public FileHeaderReader(final byte[] compressedData) {
+    public ByteArrayHeaderReader(final byte[] compressedData) {
         this.compressedData =
                 Objects.requireNonNull(compressedData,
                                        "The input compressed data is null");
