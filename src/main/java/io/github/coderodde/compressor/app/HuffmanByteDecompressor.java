@@ -4,8 +4,8 @@ import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_LENGTH;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_MAX;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODE_SIZE;
-import java.nio.ByteBuffer;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
+import java.nio.ByteBuffer;
 
 /**
  * This class implements a method for <b>decompressing</b> byte-wise files via 
@@ -20,8 +20,8 @@ public final class HuffmanByteDecompressor {
     public static byte[] decompress(final byte[] rawData) {
         final HuffmanCodeTable<Byte> codeTable = inferCodeTable(rawData);
         
-        final HuffmanDecodingTree<Byte> decodingTree = 
-                new HuffmanDecodingTree<>(codeTable);
+        final HuffmanDecoderTree<Byte> decodingTree = 
+                new HuffmanDecoderTree<>(codeTable);
         
         final int headerSize = getHeaderSize(rawData);
         
@@ -31,7 +31,7 @@ public final class HuffmanByteDecompressor {
     }
     
     private static byte[] 
-        decompressImpl(final HuffmanDecodingTree<Byte> decodingTree,
+        decompressImpl(final HuffmanDecoderTree<Byte> decodingTree,
                        final byte[] rawData,
                        final int headerSize) {
             
@@ -133,9 +133,9 @@ public final class HuffmanByteDecompressor {
         return codeword;
     }
     
-//    private static HuffmanDecodingTree<Byte> 
+//    private static HuffmanDecoderTree<Byte> 
 //        inferDecodingTree(final HuffmanCodeTable<Byte> codeTable) {
-//        return new HuffmanDecodingTree<>(codeTable);
-//        return HuffmanDecodingTree.
+//        return new HuffmanDecoderTree<>(codeTable);
+//        return HuffmanDecoderTree.
 //    }
 }

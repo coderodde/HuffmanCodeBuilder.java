@@ -70,10 +70,10 @@ public final class ByteArrayCompressedDataWriter {
      * Writes the entire compressed data of {@code inputRawData}.
      */
     public void write() {
-        int currentBitIndex = startingBitIndex;
+        long currentBitIndex = startingBitIndex;
         
         for (final byte b : inputRawData) {
-            final CodeWord codeword = codeTable.getCodeword(b);
+            final CodeWord codeword = codeTable.getCodeword(b).reverse();
             final int codewordLength = codeword.length();
             
             writeCodeWord(compressedOutputData,
@@ -92,11 +92,11 @@ public final class ByteArrayCompressedDataWriter {
      * @param codeword             the codeword to write.
      */
     private static void writeCodeWord(final byte[] compressedOutputData,
-                                      final int currentBitIndex,
+                                      final long currentBitIndex,
                                       final CodeWord codeword) {
         
-        int byteIndex = currentBitIndex / Byte.SIZE; 
-        int bitIndex  = currentBitIndex % Byte.SIZE;
+        int byteIndex = (int) (currentBitIndex / Byte.SIZE); 
+        int bitIndex  = (int) (currentBitIndex % Byte.SIZE);
         
         final int codewordLength = codeword.length();
         

@@ -25,12 +25,12 @@ public final class ByteArrayCompressedDataReader {
     /**
      * The index of the bit where compressed data begins.
      */
-    private final int startingBitIndex;
+    private final long startingBitIndex;
     
     /**
      * The (Huffman) decoder tree.
      */
-    private final HuffmanDecodingTree<Byte> decoderTree;
+    private final HuffmanDecoderTree<Byte> decoderTree;
     
     /**
      * Constructs this compressed data reader/decompressor.
@@ -43,8 +43,8 @@ public final class ByteArrayCompressedDataReader {
      */
     public ByteArrayCompressedDataReader(final byte[] outputRawData,
                                          final byte[] inputCompressedData,
-                                         final int startingBitIndex,
-                                         final HuffmanDecodingTree<Byte> 
+                                         final long startingBitIndex,
+                                         final HuffmanDecoderTree<Byte> 
                                                  decoderTree) {
         
         this.outputRawData = 
@@ -70,7 +70,7 @@ public final class ByteArrayCompressedDataReader {
      */
     public void read() {
         final int totalBytes = outputRawData.length;
-        int currentBitIndex = startingBitIndex;
+        long currentBitIndex = startingBitIndex;
         
         for (int byteIndex = 0; 
                  byteIndex != totalBytes;

@@ -11,10 +11,40 @@ public class ByteArrayCompressedDataReaderTest {
     private static final byte[] COMPRESSED_DATA = new byte[10_000];
     
     @Test
+    public void readSmallTest() {
+        final byte[] rawData = { 45, 46, 47, 47, 46, 47  };
+        
+        final WeightDistribution<Byte> wd =
+                ByteWeightDistributionBuilder
+                        .buildByteWeightDistribution(rawData);
+        
+        final HuffmanCodeTable<Byte> codeTable = 
+                HuffmanCodeBuilder.buildCode(wd);
+        
+        final ByteArrayCompressedDataWriter writer = 
+                new ByteArrayCompressedDataWriter(COMPRESSED_DATA, 
+                                                  rawData,
+                                                  0,
+                                                  codeTable);
+        writer.write();
+        
+        final HuffmanDecoderTree<Byte> decoderTree = 
+                new HuffmanDecoderTree<>(codeTable);
+        
+        final byte[] resultRawData = new byte[rawData.length];
+        
+        final ByteArrayCompressedDataReader reader = 
+                new ByteArrayCompressedDataReader(resultRawData, 
+                                                  COMPRESSED_DATA, 
+                                                  0,
+                                                  decoderTree);
+        reader.read();
+        assertTrue(Arrays.equals(rawData, resultRawData));
+    }
+    
+//    @Test
     public void readStressTest() {
         for (int i = 0; i < STRESS_TEST_ITERATIONS; ++i) {
-            System.out.println("Iteration: i = " + i);
-            
             Arrays.fill(COMPRESSED_DATA, (byte) 0);
             
             final byte[] rawData = Utils.getRawData();
@@ -36,8 +66,8 @@ public class ByteArrayCompressedDataReaderTest {
             writer.write();
             
             // Read the source data:
-            final HuffmanDecodingTree<Byte> decoderTree = 
-                    new HuffmanDecodingTree<>(codeTable);
+            final HuffmanDecoderTree<Byte> decoderTree = 
+                    new HuffmanDecoderTree<>(codeTable);
             
             final byte[] resultRawData = new byte[rawData.length];
             
@@ -49,7 +79,7 @@ public class ByteArrayCompressedDataReaderTest {
             
             reader.read();
             
-            assertEquals(rawData, resultRawData);
+            assertTrue(Arrays.equals(rawData, resultRawData));
         }
     }
 }

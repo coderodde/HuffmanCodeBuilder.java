@@ -11,7 +11,7 @@ import java.util.Objects;
  * @version 1.0.0 (Nov 14, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
-public final class HuffmanDecodingTree<S> {
+public final class HuffmanDecoderTree<S> {
     
     /**
      * This static inner class implements the Huffman decoding tree node.
@@ -44,7 +44,7 @@ public final class HuffmanDecodingTree<S> {
      * 
      * @param codeTable the code table for which to construct the decoding tree. 
      */
-    public HuffmanDecodingTree(final HuffmanCodeTable<S> codeTable) {
+    public HuffmanDecoderTree(final HuffmanCodeTable<S> codeTable) {
         Objects.requireNonNull(codeTable, "The input code table is null");
         
         for (final Map.Entry<S, CodeWord> entry : codeTable) {
@@ -62,13 +62,12 @@ public final class HuffmanDecodingTree<S> {
      *                       scan.
      * @return the encoded symbol.
      */
-    public S decode(final byte[] compressedData, int bitIndex) {
+    public S decode(final byte[] compressedData, long bitIndex) {
         Objects.requireNonNull(compressedData, "The input raw data is null");
         
         previousCodeLength = 0;
         
         TreeNode<S> node = root;
-        int tentativeBitsIndex = 0;
         
         while (node.symbol == null) {
             final boolean bit = readBit(compressedData, bitIndex);
@@ -84,8 +83,8 @@ public final class HuffmanDecodingTree<S> {
         return previousCodeLength;
     }
     
-    private static boolean readBit(final byte[] rawData, final int bitIndex) {
-        final int byteIndex = bitIndex / Byte.SIZE;
+    private static boolean readBit(final byte[] rawData, final long bitIndex) {
+        final int byteIndex = (int) (bitIndex / Byte.SIZE);
         final byte targetByte = rawData[byteIndex];
         final byte mask = (byte)(1 << (bitIndex % Byte.SIZE));
         
@@ -130,43 +129,5 @@ public final class HuffmanDecodingTree<S> {
         }
         
         node.symbol = symbol;
-    }
-    
-    private void reverseTentativeBits() {
-        for (int lo = 0, hi = previousCodeLength - 1; lo < hi; ++lo, --hi) {
-            final boolean loBit = readTentativeBit(lo);
-            final boolean hiBit = readTentativeBit(hi);
-            
-            if (loBit == hiBit) {
-                continue;
-            }
-            
-            if (loBit != hiBit) {
-                if (loBit) {
-                    // Here loBit is set and hiBit is unset:
-                    setTentativeBit(hi);
-                    unsetTentativeBit(lo);
-                } else {
-                    // Here loBit is unset and hiBit is set:
-                    unsetTentativeBit(hi);
-                    setTentativeBit(lo);
-                }
-            }
-        }
-    }
-    
-    private void setTentativeBit(final int bitIndex) {
-        final long mask = 1L << bitIndex;
-        tentativeBits |= mask;
-    }
-    
-    private void unsetTentativeBit(final int bitIndex) {
-        final long mask = 1L << bitIndex;
-        tentativeBits &= ~(tentativeBits & mask);
-    }
-    
-    private boolean readTentativeBit(final int bitIndex) {
-        final long mask = 1L << bitIndex;
-        return (tentativeBits & mask) != 0;
     }
 }
