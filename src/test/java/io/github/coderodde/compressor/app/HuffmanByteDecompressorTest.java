@@ -8,10 +8,21 @@ public class HuffmanByteDecompressorTest {
 
     private static final int STRESS_TEST_ITERATIONS = 50;
     
-//    @Test
+    @Test
+    public void smallTest() {
+        final byte[] rawData = { 45, 46, 47, 47, 46, 47 };
+        final byte[] compressedRawData =
+                HuffmanByteCompressor.compress(rawData);
+        
+        final byte[] resultData = 
+                HuffmanByteDecompressor.decompress(compressedRawData);
+        
+        assertTrue(Arrays.equals(rawData, resultData));
+    }
+    
+    @Test
     public void decompressStressTest() {
         for (int i = 0; i < STRESS_TEST_ITERATIONS; ++i) {
-            System.out.println("i = " + i);
             stressTest();
         }
     }

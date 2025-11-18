@@ -108,7 +108,8 @@ public final class ByteArrayHeaderWriter {
      * from the 8th byte.
      */
     private void writeCodeTable() {
-        int currentByteIndex = BYTES_PER_CODE_SIZE + BYTES_PER_RAW_DATA_LENGTH;
+        int currentByteIndex = BYTES_PER_CODE_SIZE 
+                             + BYTES_PER_RAW_DATA_LENGTH;
         
         for (final Map.Entry<Byte, CodeWord> entry : codeTable) {
             outputData[currentByteIndex++] = entry.getKey();
@@ -125,7 +126,7 @@ public final class ByteArrayHeaderWriter {
             currentByteIndex += BYTES_PER_CODEWORD_MAX;
         }
         
-        this.dataStartBitIndex = currentByteIndex;
+        this.dataStartBitIndex = currentByteIndex * Byte.SIZE;
     }
     
     private static void checkRawDataLength(final int rawDataLength) {
