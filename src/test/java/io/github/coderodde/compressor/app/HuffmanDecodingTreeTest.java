@@ -11,12 +11,12 @@ public class HuffmanDecodingTreeTest {
         final byte[] sourceData = { 45, 46, 47, 47, 46, 47 };
         final byte[] targetData = new byte[10];
         
-        final WeightDistribution<Byte> wd = 
+        final ByteFrequencyDistribution wd = 
                 ByteWeightDistributionBuilder
                         .buildByteWeightDistribution(sourceData);
         
-        final HuffmanCodeTable<Byte> codeTable = 
-                HuffmanCodeBuilder.buildCode(wd);
+        final ByteHuffmanCodeTable codeTable = 
+                ByteHuffmanCodeTableBuilder.buildCode(wd);
         
         final ByteArrayCompressedDataWriter writer = 
                 new ByteArrayCompressedDataWriter(targetData,
@@ -26,8 +26,8 @@ public class HuffmanDecodingTreeTest {
         
         writer.write();
         
-        final HuffmanDecoderTree<Byte> decoderTree = 
-                new HuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanDecoderTree<Byte> decoderTree = 
+                new ByteHuffmanDecoderTree<>(codeTable);
         
         final byte[] decompressedData = new byte[sourceData.length];
         

@@ -32,7 +32,7 @@ public final class ByteArrayHeaderReader {
     /**
      * The code table being read.
      */
-    private final HuffmanCodeTable<Byte> codeTable;
+    private final ByteHuffmanCodeTable codeTable;
     
     public ByteArrayHeaderReader(final byte[] compressedData) {
         this.compressedData =
@@ -48,7 +48,7 @@ public final class ByteArrayHeaderReader {
         return rawDataLength;
     }
     
-    public HuffmanCodeTable<Byte> getCodeTable() {
+    public ByteHuffmanCodeTable getCodeTable() {
         return codeTable;
     }
     
@@ -78,8 +78,8 @@ public final class ByteArrayHeaderReader {
         return byteBuffer.order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
     
-    private HuffmanCodeTable<Byte> readCodeTable(final int codeTableSize) {
-        final HuffmanCodeTable<Byte> codeTable = new HuffmanCodeTable<>();
+    private ByteHuffmanCodeTable readCodeTable(final int codeTableSize) {
+        final ByteHuffmanCodeTable codeTable = new ByteHuffmanCodeTable();
         final int codeEntryLength = Utils.getCodeEntryLength();
         
         int byteCursor = BYTES_PER_CODE_SIZE + BYTES_PER_RAW_DATA_LENGTH;
@@ -95,7 +95,7 @@ public final class ByteArrayHeaderReader {
         return codeTable;
     }
     
-    private static void readCodeEntry(final HuffmanCodeTable<Byte> codeTable,
+    private static void readCodeEntry(final ByteHuffmanCodeTable codeTable,
                                       final byte[] compressedData,
                                       final int byteCursor) {
         final byte value  = compressedData[byteCursor];
@@ -107,7 +107,7 @@ public final class ByteArrayHeaderReader {
         
         final CodeWord codeword = inferCodeWord(length, codeEntryData);
         
-        codeTable.linkSymbolToCodeword(value, codeword);
+        codeTable.put(value, codeword);
     }
     
     private static CodeWord inferCodeWord(final int length,

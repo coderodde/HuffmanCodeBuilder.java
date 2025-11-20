@@ -30,7 +30,7 @@ public final class ByteArrayCompressedDataReader {
     /**
      * The (Huffman) decoder tree.
      */
-    private final HuffmanDecoderTree<Byte> decoderTree;
+    private final ByteHuffmanDecoderTree<Byte> decoderTree;
     
     /**
      * Constructs this compressed data reader/decompressor.
@@ -44,7 +44,7 @@ public final class ByteArrayCompressedDataReader {
     public ByteArrayCompressedDataReader(final byte[] outputRawData,
                                          final byte[] inputCompressedData,
                                          final long startingBitIndex,
-                                         final HuffmanDecoderTree<Byte> 
+                                         final ByteHuffmanDecoderTree<Byte> 
                                                  decoderTree) {
         
         this.outputRawData = 

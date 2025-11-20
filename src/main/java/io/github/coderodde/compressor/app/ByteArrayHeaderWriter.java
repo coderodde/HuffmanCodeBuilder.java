@@ -1,5 +1,6 @@
 package io.github.coderodde.compressor.app;
 
+import static io.github.coderodde.compressor.app.Configuration.CODE_TABLE_CAPACITY;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODEWORD_MAX;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_CODE_SIZE;
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
@@ -41,11 +42,11 @@ public final class ByteArrayHeaderWriter {
     /**
      * The code table to write to the compressed file header.
      */
-    private final HuffmanCodeTable<Byte> codeTable;
+    private final ByteHuffmanCodeTable codeTable;
     
     public ByteArrayHeaderWriter(final int rawDataLength,
-                            final byte[] outputData,
-                            final HuffmanCodeTable<Byte> codeTable) {
+                                 final byte[] outputData,
+                                 final ByteHuffmanCodeTable codeTable) {
         
         checkRawDataLength(rawDataLength);
         Objects.requireNonNull(outputData, "The output data array is null");
@@ -111,11 +112,14 @@ public final class ByteArrayHeaderWriter {
         int currentByteIndex = BYTES_PER_CODE_SIZE 
                              + BYTES_PER_RAW_DATA_LENGTH;
         
-        for (final Map.Entry<Byte, CodeWord> entry : codeTable) {
-            outputData[currentByteIndex++] = entry.getKey();
-            outputData[currentByteIndex++] = (byte) entry.getValue().length();
-            
-            final byte[] codewordBytes = entry.getValue().toByteArray();
+        for (int intValue = 0; 
+                 intValue < CODE_TABLE_CAPACITY; 
+                 intValue++) {
+        
+            // Extract the least significant byte from 'intValue':
+            final byte value = (byte)(intValue & 0xff);
+            final CodeWord codeword = codeTable.get(value);
+            final byte[] codewordBytes = codeword.toByteArray();
             
             System.arraycopy(codewordBytes, 
                              0, 
@@ -140,7 +144,7 @@ public final class ByteArrayHeaderWriter {
         }
     }
     
-    private static void checkCodeTable(final HuffmanCodeTable<Byte> codeTable) {
+    private static void checkCodeTable(final ByteHuffmanCodeTable codeTable) {
         if (codeTable.isEmpty()) {
             throw new EmptyCodeTableException();
         }

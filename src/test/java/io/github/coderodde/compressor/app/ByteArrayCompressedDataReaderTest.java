@@ -14,12 +14,12 @@ public class ByteArrayCompressedDataReaderTest {
     public void readSmallTest() {
         final byte[] rawData = { 45, 46, 47, 47, 46, 47  };
         
-        final WeightDistribution<Byte> wd =
+        final ByteFrequencyDistribution wd =
                 ByteWeightDistributionBuilder
                         .buildByteWeightDistribution(rawData);
         
-        final HuffmanCodeTable<Byte> codeTable = 
-                HuffmanCodeBuilder.buildCode(wd);
+        final ByteHuffmanCodeTable codeTable = 
+                ByteHuffmanCodeTableBuilder.buildCode(wd);
         
         final ByteArrayCompressedDataWriter writer = 
                 new ByteArrayCompressedDataWriter(COMPRESSED_DATA, 
@@ -28,8 +28,8 @@ public class ByteArrayCompressedDataReaderTest {
                                                   codeTable);
         writer.write();
         
-        final HuffmanDecoderTree<Byte> decoderTree = 
-                new HuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanDecoderTree<Byte> decoderTree = 
+                new ByteHuffmanDecoderTree<>(codeTable);
         
         final byte[] resultRawData = new byte[rawData.length];
         
@@ -50,12 +50,12 @@ public class ByteArrayCompressedDataReaderTest {
             final byte[] rawData = TestUtils.getRawData();
             
             // Write the compressed data:
-            final WeightDistribution<Byte> wd = 
+            final ByteFrequencyDistribution wd = 
                     ByteWeightDistributionBuilder
                             .buildByteWeightDistribution(rawData);
             
-            final HuffmanCodeTable<Byte> codeTable = 
-                    HuffmanCodeBuilder.buildCode(wd);
+            final ByteHuffmanCodeTable codeTable = 
+                    ByteHuffmanCodeTableBuilder.buildCode(wd);
             
             final ByteArrayCompressedDataWriter writer = 
                     new ByteArrayCompressedDataWriter(COMPRESSED_DATA,
@@ -66,8 +66,8 @@ public class ByteArrayCompressedDataReaderTest {
             writer.write();
             
             // Read the source data:
-            final HuffmanDecoderTree<Byte> decoderTree = 
-                    new HuffmanDecoderTree<>(codeTable);
+            final ByteHuffmanDecoderTree<Byte> decoderTree = 
+                    new ByteHuffmanDecoderTree<>(codeTable);
             
             final byte[] resultRawData = new byte[rawData.length];
             

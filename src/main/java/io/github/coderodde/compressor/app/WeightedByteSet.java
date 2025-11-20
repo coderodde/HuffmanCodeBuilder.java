@@ -10,27 +10,27 @@ import java.util.Set;
  * @version 1.0.0 (Nov 14, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
-final class WeightedSymbolSet<S> implements Comparable<WeightedSymbolSet<S>> {
+final class WeightedByteSet implements Comparable<WeightedByteSet> {
 
-    private final Set<S> set;
-    private final double totalSetWeight;
+    private final Set<Byte> set;
+    private final long totalSetWeight;
 
-    WeightedSymbolSet(final Set<S> set,
-                      final double totalSetWeight) {
+    WeightedByteSet(final Set<Byte> set,
+                      final long totalSetWeight) {
         this.set = set;
         this.totalSetWeight = totalSetWeight;
     }
     
-    Set<S> getSet() {
+    Set<Byte> getSet() {
         return set;
     }
     
-    double getTotalWeight() {
+    long getTotalWeight() {
         return totalSetWeight;
     }
 
     @Override
-    public int compareTo(final WeightedSymbolSet<S> o) {
+    public int compareTo(final WeightedByteSet o) {
         return Double.compare(totalSetWeight, o.totalSetWeight);
     }
 }

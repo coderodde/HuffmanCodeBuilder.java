@@ -19,12 +19,12 @@ public final class ByteArrayHeaderReaderTest {
     @Test
     public void smallTest() {
         final byte[] rawData = { 88, 40, 48 };
-        final WeightDistribution<Byte> wd = 
+        final ByteFrequencyDistribution wd = 
                 ByteWeightDistributionBuilder
                         .buildByteWeightDistribution(rawData);
         
-        final HuffmanCodeTable<Byte> expectedCodeTable = 
-                HuffmanCodeBuilder.buildCode(wd);
+        final ByteHuffmanCodeTable expectedCodeTable = 
+                ByteHuffmanCodeTableBuilder.buildCode(wd);
         
         final ByteArrayHeaderWriter writer = new ByteArrayHeaderWriter(rawData.length,
                                                              COMPRESSED_DATA,
@@ -36,7 +36,7 @@ public final class ByteArrayHeaderReaderTest {
                 new ByteArrayHeaderReader(COMPRESSED_DATA);
         
         final int resultRawDataLength = reader.getRawDataLength();
-        final HuffmanCodeTable<Byte> resultCodeTable = reader.getCodeTable();
+        final ByteHuffmanCodeTable resultCodeTable = reader.getCodeTable();
         
         assertEquals(rawData.length, resultRawDataLength);
         assertEquals(expectedCodeTable, resultCodeTable);
@@ -50,12 +50,12 @@ public final class ByteArrayHeaderReaderTest {
             
             final byte[] rawData = TestUtils.getRawData();
             
-            final WeightDistribution<Byte> weightDistribution =
+            final ByteFrequencyDistribution weightDistribution =
                     ByteWeightDistributionBuilder
                             .buildByteWeightDistribution(rawData);
             
-            final HuffmanCodeTable<Byte> expectedCodeTable = 
-                    HuffmanCodeBuilder.buildCode(weightDistribution);
+            final ByteHuffmanCodeTable expectedCodeTable = 
+                    ByteHuffmanCodeTableBuilder.buildCode(weightDistribution);
             
             final ByteArrayHeaderWriter writer = 
                     new ByteArrayHeaderWriter(rawData.length,
@@ -68,7 +68,7 @@ public final class ByteArrayHeaderReaderTest {
                     new ByteArrayHeaderReader(COMPRESSED_DATA);
             
             final int rawDataLength = reader.getRawDataLength();
-            final HuffmanCodeTable<Byte> readCodeTable = reader.getCodeTable();
+            final ByteHuffmanCodeTable readCodeTable = reader.getCodeTable();
             
             assertEquals(rawData.length, rawDataLength);
             assertEquals(expectedCodeTable, readCodeTable);

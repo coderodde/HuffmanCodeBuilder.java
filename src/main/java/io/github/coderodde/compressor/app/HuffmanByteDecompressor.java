@@ -17,9 +17,9 @@ public final class HuffmanByteDecompressor {
         final int rawDataLength = headerReader.getRawDataLength();
         final byte[] rawData = new byte[rawDataLength];
         
-        final HuffmanCodeTable<Byte> codeTable = headerReader.getCodeTable();
-        final HuffmanDecoderTree<Byte> decoder = 
-                new HuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanCodeTable codeTable = headerReader.getCodeTable();
+        final ByteHuffmanDecoderTree<Byte> decoder = 
+                new ByteHuffmanDecoderTree<>(codeTable);
         
         final int startingBitIndex = 
                 Utils.countBytesInCodeHeader(codeTable.size()) * Byte.SIZE;

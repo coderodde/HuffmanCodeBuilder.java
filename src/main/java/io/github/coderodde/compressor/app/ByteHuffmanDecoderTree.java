@@ -11,23 +11,23 @@ import java.util.Objects;
  * @version 1.0.0 (Nov 14, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
-public final class HuffmanDecoderTree<S> {
+public final class ByteHuffmanDecoderTree<S> {
     
     /**
      * This static inner class implements the Huffman decoding tree node.
      * 
      * @param <S> the alphabet symbol type. 
      */
-    private static final class TreeNode<S> {
-        S symbol;
-        TreeNode<S> zeroChild;
-        TreeNode<S> oneChild;
+    private static final class TreeNode {
+        Byte value;
+        TreeNode zeroChild;
+        TreeNode oneChild;
     }
     
     /**
      * The root node of the tree.
      */
-    private final TreeNode<S> root = new TreeNode<>();
+    private final TreeNode root = new TreeNode();
     
     /**
      * Caches the code length of the previously decoded symbol.
@@ -39,13 +39,18 @@ public final class HuffmanDecoderTree<S> {
      * 
      * @param codeTable the code table for which to construct the decoding tree. 
      */
-    public HuffmanDecoderTree(final HuffmanCodeTable<S> codeTable) {
+    public ByteHuffmanDecoderTree(final ByteHuffmanCodeTable codeTable) {
         Objects.requireNonNull(codeTable, "The input code table is null");
         
-        for (final Map.Entry<S, CodeWord> entry : codeTable) {
-            final S symbol = entry.getKey();
-            final CodeWord codeword = entry.getValue();
-            insert(symbol, codeword);
+        for (int value = 0; 
+                 value < Configuration.CODE_TABLE_CAPACITY;
+                 value++) {
+            final CodeWord codeword = codeTable.get((byte) value);
+            
+            if (codeword != null) {
+                final Byte byteValue = Byte.valueOf((byte) value);
+                insert(byteValue, codeword);
+            }
         }
     }
     
@@ -57,14 +62,14 @@ public final class HuffmanDecoderTree<S> {
      *                       scan.
      * @return the encoded symbol.
      */
-    public S decode(final byte[] compressedData, long bitIndex) {
+    public byte decode(final byte[] compressedData, long bitIndex) {
         Objects.requireNonNull(compressedData, "The input raw data is null");
         
         previousCodeLength = 0;
         
-        TreeNode<S> node = root;
+        TreeNode node = root;
         
-        while (node.symbol == null) {
+        while (node.value == null) {
             final boolean bit = readBit(compressedData,
                                         bitIndex);
             
@@ -74,7 +79,7 @@ public final class HuffmanDecoderTree<S> {
             ++previousCodeLength;
         }
         
-        return node.symbol;
+        return node.value;
     }
     
     public long getPreviousCodeLength() {
@@ -95,8 +100,8 @@ public final class HuffmanDecoderTree<S> {
      * @param symbol   the symbol to insert.
      * @param codeword the codeword associated with the input symbol.
      */
-    private void insert(final S symbol, final CodeWord codeword) {
-        TreeNode<S> node = root;
+    private void insert(final Byte value, final CodeWord codeword) {
+        TreeNode node = root;
         
         for (int i = codeword.length() - 1; i >= 0; --i) {
             final boolean bit = codeword.get(i);
@@ -104,21 +109,21 @@ public final class HuffmanDecoderTree<S> {
             if (bit) { 
                 // Bit is set to 1.
                 if (node.oneChild == null) {
-                    node.oneChild = new TreeNode<>();
+                    node.oneChild = new TreeNode();
                 }
                 
                 node = node.oneChild;
             } else {
                 // Bit is set to 0.
                 if (node.zeroChild == null) {
-                    node.zeroChild = new TreeNode<>();
+                    node.zeroChild = new TreeNode();
                 }
                 
                 node = node.zeroChild;
             }
         }
         
-        if (node.symbol != null) {
+        if (node.value != null) {
             throw new IllegalStateException(
                     String.format(
                             "Dublicate codeword [%s]: " + 
@@ -126,6 +131,6 @@ public final class HuffmanDecoderTree<S> {
                             codeword.toString()));
         }
         
-        node.symbol = symbol;
+        node.value = value;
     }
 }

@@ -32,7 +32,7 @@ public final class ByteArrayCompressedDataWriter {
     /**
      * The actual (Huffman) code table.
      */
-    private final HuffmanCodeTable<Byte> codeTable;
+    private final ByteHuffmanCodeTable codeTable;
     
     /**
      * Constructs this writer.
@@ -46,7 +46,7 @@ public final class ByteArrayCompressedDataWriter {
             final byte[] compressedOutputData,
             final byte[] inputRawData,
             final long startingBitIndex,
-            final HuffmanCodeTable<Byte> codeTable) {
+            final ByteHuffmanCodeTable codeTable) {
         
         this.compressedOutputData = 
                 Objects.requireNonNull(
@@ -73,7 +73,7 @@ public final class ByteArrayCompressedDataWriter {
         long currentBitIndex = startingBitIndex;
         
         for (final byte b : inputRawData) {
-            final CodeWord codeword = codeTable.getCodeword(b).reverse();
+            final CodeWord codeword = codeTable.get(b).reverse();
             final int codewordLength = codeword.length();
             
             writeCodeWord(compressedOutputData,

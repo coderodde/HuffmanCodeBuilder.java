@@ -57,12 +57,12 @@ public final class HuffmanByteCompressor {
             throw new IllegalArgumentException("The input byte array is empty");
         }
         
-        final WeightDistribution<Byte> byteWeightDistribution =
+        final ByteFrequencyDistribution byteWeightDistribution =
                 ByteWeightDistributionBuilder
                         .buildByteWeightDistribution(rawData);
                
-        final HuffmanCodeTable<Byte> codeTable = 
-                HuffmanCodeBuilder.buildCode(byteWeightDistribution);
+        final ByteHuffmanCodeTable codeTable = 
+                ByteHuffmanCodeTableBuilder.buildCode(byteWeightDistribution);
         
         final int countNumberOfBytesInCodeHeader = 
                 Utils.countBytesInCodeHeader(codeTable.size());
