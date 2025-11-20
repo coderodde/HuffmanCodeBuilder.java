@@ -34,7 +34,7 @@ public final class App {
             } else {
                 printUsage();
             }
-        } catch (final IOException ex) {
+        } catch (final Exception ex) {
             error(ex.getMessage());
             System.exit(EXIT_FAILURE);
         }
@@ -73,14 +73,31 @@ public final class App {
         }
         
         final Path path = inputFile.toPath();
+        
+        long ta = System.currentTimeMillis();
         final byte[] rawData = Files.readAllBytes(path);
+        long tb = System.currentTimeMillis();
+        
+        info(String.format(
+                "Read all file bytes in %d milliseconds.\n", tb - ta));
+        
+        ta = System.currentTimeMillis();
         final byte[] compressedData = HuffmanByteCompressor.compress(rawData);
+        tb = System.currentTimeMillis();
+        
+        info(String.format(
+                "Compressed the data in %d milliseconds.\n", tb - ta));
         
         final File outputFile = 
                 new File(inputFileName + COMPRESSED_FILE_EXTENSION);
         
+        ta = System.currentTimeMillis();
         Files.write(outputFile.toPath(), 
                     compressedData);
+        tb = System.currentTimeMillis();
+        
+        info(String.format(
+                "Written the compressed data in %d milliseconds.\n", tb - ta));
     }
     
     private static void decompressFile(final String compressedFileName,
@@ -101,17 +118,39 @@ public final class App {
         }
         
         final Path compressedFilePath = compressedFile.toPath();
+        
+        long ta = System.currentTimeMillis();
         final byte[] compressedData = Files.readAllBytes(compressedFilePath);
+        long tb = System.currentTimeMillis();
+        
+        info(String.format(
+                "Read the compressed data in %d milliseconds.\n", tb - ta));
         
         final Path outputFilePath = outputFile.toPath();
+        
+        ta = System.currentTimeMillis();
         final byte[] originalData =
                 HuffmanByteDecompressor.decompress(compressedData);
+        tb = System.currentTimeMillis();
         
+        info(String.format(
+                "Decompressed the data in %d milliseconds.\n", tb - ta));
+        
+        ta = System.currentTimeMillis();
         Files.write(outputFilePath, originalData);
+        tb = System.currentTimeMillis();
+        
+        info(String.format(
+                "Written the decompressed data in %d milliseconds.\n",
+                tb - ta));
     }
     
     private static void error(final String message) {
         System.err.printf("[ERROR] %s", message);
+    }
+    
+    private static void info(final String message) {
+        System.out.printf("[INFO] %s", message);
     }
     
     /**
