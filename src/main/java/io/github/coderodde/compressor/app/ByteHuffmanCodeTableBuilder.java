@@ -1,5 +1,6 @@
 package io.github.coderodde.compressor.app;
 
+import static io.github.coderodde.compressor.app.Configuration.CODE_TABLE_CAPACITY;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -34,10 +35,7 @@ public final class ByteHuffmanCodeTableBuilder {
         final ByteHuffmanCodeTable codeTable = new ByteHuffmanCodeTable();
         final Queue<WeightedByteSet> queue   = new PriorityQueue<>();
         
-        final int byteFrequencyDistributionSize =
-                byteFrequencyDistribution.size();
-        
-        for (int i = 0; i < byteFrequencyDistributionSize; ++i) {
+        for (int i = 0; i < CODE_TABLE_CAPACITY; ++i) {
             // Grab the 8 least significant bits of 'i':
             final byte value = (byte)(i & 0xff);
             final long frequency =
@@ -47,6 +45,7 @@ public final class ByteHuffmanCodeTableBuilder {
                 // Once here, value is present in the compressed data:
                 final Set<Byte> set = new HashSet<>();
                 set.add(value);
+                codeTable.put(value, new CodeWord(0));
                 queue.add(new WeightedByteSet(set, frequency));
             }
         }

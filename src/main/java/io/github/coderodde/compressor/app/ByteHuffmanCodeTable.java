@@ -63,4 +63,49 @@ public final class ByteHuffmanCodeTable {
     public boolean isEmpty() {
         return size == 0;
     }
+    
+    @Override
+    public boolean equals(final Object object) {
+        if (object == null) {
+            return false;
+        }
+        
+        if (!getClass().equals(object.getClass())) {
+            return false;
+        }
+        
+        if (object == this) {
+            return true;
+        }
+        
+        final ByteHuffmanCodeTable other = (ByteHuffmanCodeTable) object;
+        
+        if (size != other.size()) {
+            return false;
+        }
+        
+        for (int i = 0; i < CODE_TABLE_CAPACITY; ++i) {
+            final CodeWord cw1 = get((byte) i);
+            final CodeWord cw2 = other.get((byte) i);
+            
+            if (cw1 == null && cw2 == null) {
+                continue;
+            }
+            
+            if (cw1 != null && cw2 == null) {
+                return false;
+            }
+            
+            if (cw1 == null && cw2 != null) {
+                return false;
+            }
+            
+            // Here, both cw1 and cw2 are not null:
+            if (!cw1.equals(cw2)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

@@ -6,7 +6,6 @@ import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER
 import static io.github.coderodde.compressor.app.HuffmanByteCompressor.BYTES_PER_RAW_DATA_LENGTH;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -119,15 +118,21 @@ public final class ByteArrayHeaderWriter {
             // Extract the least significant byte from 'intValue':
             final byte value = (byte)(intValue & 0xff);
             final CodeWord codeword = codeTable.get(value);
-            final byte[] codewordBytes = codeword.toByteArray();
             
-            System.arraycopy(codewordBytes, 
-                             0, 
-                             outputData, 
-                             currentByteIndex, 
-                             codewordBytes.length);
-            
-            currentByteIndex += BYTES_PER_CODEWORD_MAX;
+            if (codeword != null) {
+                outputData[currentByteIndex++] = value;
+                outputData[currentByteIndex++] = (byte) codeword.length();
+                
+                final byte[] codewordBytes = codeword.toByteArray();
+
+                System.arraycopy(codewordBytes, 
+                                 0, 
+                                 outputData, 
+                                 currentByteIndex, 
+                                 codewordBytes.length);
+
+                currentByteIndex += BYTES_PER_CODEWORD_MAX;
+            }
         }
         
         this.dataStartBitIndex = currentByteIndex * Byte.SIZE;
