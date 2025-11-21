@@ -6,11 +6,10 @@ import java.util.Objects;
  * This class implements the Huffman decoding tree.
  * 
  * @author Rodion "rodde" Efremov
- * @param <S> the alphabet symbol type.
- * @version 1.0.0 (Nov 14, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
-public final class ByteHuffmanDecoderTree<S> {
+public final class ByteHuffmanDecoderTree {
     
     /**
      * This static inner class implements the Huffman decoding tree node.
@@ -47,7 +46,7 @@ public final class ByteHuffmanDecoderTree<S> {
             final CodeWord codeword = codeTable.get((byte) value);
             
             if (codeword != null) {
-                final Byte byteValue = Byte.valueOf((byte) value);
+                final Byte byteValue = (byte) value;
                 insert(byteValue, codeword);
             }
         }

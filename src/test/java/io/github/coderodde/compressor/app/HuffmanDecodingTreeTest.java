@@ -26,8 +26,8 @@ public class HuffmanDecodingTreeTest {
         
         writer.write();
         
-        final ByteHuffmanDecoderTree<Byte> decoderTree = 
-                new ByteHuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanDecoderTree decoderTree = 
+                new ByteHuffmanDecoderTree(codeTable);
         
         final byte[] decompressedData = new byte[sourceData.length];
         

@@ -28,8 +28,8 @@ public class ByteArrayCompressedDataReaderTest {
                                                   codeTable);
         writer.write();
         
-        final ByteHuffmanDecoderTree<Byte> decoderTree = 
-                new ByteHuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanDecoderTree decoderTree = 
+                new ByteHuffmanDecoderTree(codeTable);
         
         final byte[] resultRawData = new byte[rawData.length];
         
@@ -66,8 +66,8 @@ public class ByteArrayCompressedDataReaderTest {
             writer.write();
             
             // Read the source data:
-            final ByteHuffmanDecoderTree<Byte> decoderTree = 
-                    new ByteHuffmanDecoderTree<>(codeTable);
+            final ByteHuffmanDecoderTree decoderTree = 
+                    new ByteHuffmanDecoderTree(codeTable);
             
             final byte[] resultRawData = new byte[rawData.length];
             

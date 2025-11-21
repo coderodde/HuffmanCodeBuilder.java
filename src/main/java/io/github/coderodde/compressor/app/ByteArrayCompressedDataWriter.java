@@ -8,7 +8,7 @@ import java.util.Objects;
  * {@link io.github.coderodde.compressor.app.ByteArrayHeaderWriter}.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.0.0 (Nov 17, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 17, 2025)
  */
 public final class ByteArrayCompressedDataWriter {

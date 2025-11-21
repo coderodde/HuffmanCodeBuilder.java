@@ -5,7 +5,7 @@ package io.github.coderodde.compressor.app;
  * Huffman-coding.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.0.0 (Nov 14, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
 public final class HuffmanByteDecompressor {
@@ -18,8 +18,8 @@ public final class HuffmanByteDecompressor {
         final byte[] rawData = new byte[rawDataLength];
         
         final ByteHuffmanCodeTable codeTable = headerReader.getCodeTable();
-        final ByteHuffmanDecoderTree<Byte> decoder = 
-                new ByteHuffmanDecoderTree<>(codeTable);
+        final ByteHuffmanDecoderTree decoder = 
+                new ByteHuffmanDecoderTree(codeTable);
         
         final int startingBitIndex = 
                 Utils.countBytesInCodeHeader(codeTable.size()) * Byte.SIZE;

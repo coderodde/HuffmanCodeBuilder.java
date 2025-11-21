@@ -1,24 +1,21 @@
 package io.github.coderodde.compressor.app;
 
-import java.util.BitSet;
-
 /**
  * This class implements a <b>binary</b> code word in data compression 
  * scenarios.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.0 (Nov 13, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Oct 28, 2025)
  */
 public class CodeWord {
 
     private int length;
-    private final BitSet bits;
+    private long bits;
     
     public CodeWord(final int length) {
         checkLength(length);
         this.length = length;
-        this.bits = new BitSet(length);
     }
     
     public CodeWord reverse() {
@@ -34,15 +31,27 @@ public class CodeWord {
     }
     
     public byte[] toByteArray() {
-        return bits.toByteArray();
+        final int byteArrayLength = 
+                length / Byte.SIZE + (length % Byte.SIZE != 0 ? 1 : 0);
+        
+        final byte[] byteArray = new byte[byteArrayLength];
+        
+        for (int byteArrayIndex = 0;
+                 byteArrayIndex < byteArrayLength;
+                 byteArrayIndex++) {
+            
+            byteArray[byteArrayIndex] = extractByte(byteArrayIndex);
+        }
+        
+        return byteArray;
     }
     
     public void prependBit(final boolean bit) {
-        if (bit) {
-            bits.set(length);
-        }
-        
         ++length;
+        
+        if (bit) {
+            set(length - 1);
+        }
     }
     
     public int length() {
@@ -51,17 +60,20 @@ public class CodeWord {
     
     public boolean get(final int index) {
         checkIndex(index);
-        return bits.get(index);
+        final long mask = 1L << index;
+        return ((bits & mask) != 0);
     }
     
     public void set(final int index) {
         checkIndex(index);
-        bits.set(index);
+        final long mask = 1L << index;
+        bits |= mask;
     }
     
     public void unset(final int index) {
         checkIndex(index);
-        bits.set(index, false);
+        final long mask = ~(1L << index);
+        bits &= mask;
     }
     
     @Override
@@ -102,6 +114,11 @@ public class CodeWord {
         }
         
         return sb.toString();
+    }
+    
+    private byte extractByte(final int byteArrayIndex) {
+        final long tmp = (bits >>> (byteArrayIndex * Byte.SIZE));
+        return (byte) (tmp & 0xff);
     }
     
     private void checkIndex(final int index) {

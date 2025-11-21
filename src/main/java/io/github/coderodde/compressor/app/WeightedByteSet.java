@@ -7,7 +7,7 @@ import java.util.Set;
  * frequencies.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.0.0 (Nov 14, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
 final class WeightedByteSet implements Comparable<WeightedByteSet> {
@@ -31,6 +31,6 @@ final class WeightedByteSet implements Comparable<WeightedByteSet> {
 
     @Override
     public int compareTo(final WeightedByteSet o) {
-        return Double.compare(totalSetWeight, o.totalSetWeight);
+        return Long.compare(totalSetWeight, o.totalSetWeight);
     }
 }

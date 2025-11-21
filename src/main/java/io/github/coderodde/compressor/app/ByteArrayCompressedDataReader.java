@@ -7,7 +7,7 @@ import java.util.Objects;
  * compression source data.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.0.0 (Nov 17, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 17, 2025)
  */
 public final class ByteArrayCompressedDataReader {
@@ -30,7 +30,7 @@ public final class ByteArrayCompressedDataReader {
     /**
      * The (Huffman) decoder tree.
      */
-    private final ByteHuffmanDecoderTree<Byte> decoderTree;
+    private final ByteHuffmanDecoderTree decoderTree;
     
     /**
      * Constructs this compressed data reader/decompressor.
@@ -44,7 +44,7 @@ public final class ByteArrayCompressedDataReader {
     public ByteArrayCompressedDataReader(final byte[] outputRawData,
                                          final byte[] inputCompressedData,
                                          final long startingBitIndex,
-                                         final ByteHuffmanDecoderTree<Byte> 
+                                         final ByteHuffmanDecoderTree 
                                                  decoderTree) {
         
         this.outputRawData = 

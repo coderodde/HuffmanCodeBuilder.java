@@ -6,7 +6,7 @@ import static io.github.coderodde.compressor.app.Configuration.CODE_TABLE_CAPACI
  * This class models the byte frequency distributions.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.0.0 (Nov 13, 2025)
+ * @version 1.1.2 (Nov 21, 2025)
  * @since 1.0.0 (Nov 13, 2025)
  */
 public final class ByteFrequencyDistribution {
