@@ -6,7 +6,7 @@ package io.github.coderodde.compressor.app;
  * requested symbol.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 13, 2025)
  */
 public class SymbolNotFoundException extends RuntimeException {

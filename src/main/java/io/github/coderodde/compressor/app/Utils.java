@@ -10,7 +10,7 @@ import static io.github.coderodde.compressor.app.Configuration.BYTES_PER_RAW_DAT
  * This class contains some various helper methods.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 16, 2025)
  */
 public final class Utils {

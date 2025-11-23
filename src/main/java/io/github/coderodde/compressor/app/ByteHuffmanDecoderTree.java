@@ -6,7 +6,7 @@ import java.util.Objects;
  * This class implements the Huffman decoding tree.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
 public final class ByteHuffmanDecoderTree {

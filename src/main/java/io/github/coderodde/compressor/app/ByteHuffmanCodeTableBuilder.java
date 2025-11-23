@@ -11,7 +11,7 @@ import java.util.Set;
  * This class implements the Huffman code builder over weight distributions.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 12, 2025)
  */
 public final class ByteHuffmanCodeTableBuilder {

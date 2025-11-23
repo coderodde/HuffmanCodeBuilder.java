@@ -4,7 +4,7 @@ package io.github.coderodde.compressor.app;
  * This class contains configuration constants.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 19, 2025)
  */
 final class Configuration {

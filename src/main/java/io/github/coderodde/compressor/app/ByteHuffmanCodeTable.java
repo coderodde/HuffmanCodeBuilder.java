@@ -6,7 +6,7 @@ import static io.github.coderodde.compressor.app.Configuration.CODE_TABLE_CAPACI
  * This class implements a Huffman code table over byte (8-bit) alphabet.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 20, 2025)
  */
 public final class ByteHuffmanCodeTable {

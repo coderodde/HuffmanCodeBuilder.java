@@ -7,7 +7,7 @@ import java.util.Set;
  * frequencies.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Nov 14, 2025)
  */
 final class WeightedByteSet implements Comparable<WeightedByteSet> {

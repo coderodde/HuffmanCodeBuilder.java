@@ -5,7 +5,7 @@ package io.github.coderodde.compressor.app;
  * scenarios.
  * 
  * @author Rodion "rodde" Efremov
- * @version 1.1.2 (Nov 21, 2025)
+ * @version 1.1.3 (Nov 23, 2025)
  * @since 1.0.0 (Oct 28, 2025)
  */
 public class CodeWord {
